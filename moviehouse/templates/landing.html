@@ -1,0 +1,240 @@
+{% load static %}
+
+{% block headerinclude %}
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+    <title>MovieHouse</title>
+{% endblock headerinclude %}
+
+{% block content %}
+    <div class="navbar">
+      <header>
+        <div class="logo">
+          <h1>MovieHouse</h1>
+        </div>
+
+        <nav>
+          <ul>
+            <li><button type="button" id="CR" onclick='window.location.href="./customerregistration"'>Customer Registration</button></li>
+            <!-- <form action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+              {% csrf_token %}   -->
+             <li><button type="submit" id="DR" onclick='window.location.href="./dvdregistration"'>DVD Registration</button></li>
+            <!-- </form> -->
+            <li><button type="button" id="DS">Dashboard</button></li>
+            <li><button type="button" id="LO" onclick='window.location.href="./index"'>Log Out</button></li>
+          </ul>
+        </nav>
+      </header>  
+    </div>
+
+    <div class="slider">
+      <div class="load"></div>
+        <div class="container main-info-section">
+          <div class="text">
+            <h1>WELCOME</h1>
+            <span></span>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Dolore illo, <br> numquam nihil earum neque, minima libero perferendis qui in quo 
+              blanditiis <br> quidem, quis repellendus aliquid distinctio 
+              quasi voluptate beatae placeat!</p>
+          </div>
+        </div>
+    </div>
+    <hr>  
+    <table id="dvd" style="width:100%">
+    <thead>
+        <tr>
+            <th>DATE REGISTERED</th>
+            <th>GENRE</th>
+            <th>TITLE</th>
+            <th>RELEASE DATE</th>
+            <th>Director</th>
+            <th>Cast</th>
+            <th>PRICE</th>
+            <th>NO OF ITEMS</th>
+            <th>DVD PICTURE</th>
+            <th>ACTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dvd in dvds %}
+          {% if dvd.dvdpic.url is not null %}                   
+        <tr>
+            <td>{{dvd.dateregistered}}</td>
+            <td>{{dvd.genre}}</td>
+            <td>{{dvd.title}}</td>
+            <td>{{dvd.reldate}}</td>
+            <td>{{dvd.dfirstname}} {{dvd.dlastname}}</td>
+            <td>{{dvd.cfirstname}} {{dvd.clastname}}</td>
+            <td>{{dvd.price}}</td>
+            <td>{{dvd.items}}</td>
+            <td>{{dvd.dvdpic}}</td>
+            <td>
+                <a type="button" onclick="openCUForm()" class="btn btn-primary" data-toggle="modal" data-target="#dvdModal-{{dvd.sku}}">VIEW</a>
+                <button type="button" onclick="openAUForm()" class="btn btn-primary" data-toggle="popup-overlay2" data-target="dvddelete">
+                  DELETE
+                </button>
+            </td>
+        </tr>
+          <div class="modal fade" id="dvdModal-{{dvd.sku}}" tabindex="-1" role="dialog" aria-labelledby="dvdModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+              <div class="popup-overlay3" ></div>
+              <div class="popup3">
+                <div class="popup-close" onclick="closeCUForm()">&times;</div>
+                <div class="form3">
+                  <div class="header3"> 
+                    UPDATE FORM
+                  </div>
+                  <form class="modal">
+                    <div>
+                      <label id="date">Registration Date :</label>
+                      <input type="date" name="datetime" id="datetimepicker" value ={{dvd.dateregistered}} />
+                    </div>
+                    <div>
+                      <label id="gen">Genre :</label>
+                      <input type="text" id="genre" name="genre" placeholder="Genre" value ={{dvd.genre}} />
+                    </div>
+                      <div>
+                      <label id="release">Released Date :</label>
+                      <input type="date" name="releasedate" id="reldate" value ={{dvd.title}} />
+                    </div>
+                  <div>
+                      <label id="title">Movie Title :</label>
+                      <input type="text" id="ttitle" name="title" placeholder="Movie Title" value ={{dvd.reldate}} />
+                    </div>
+                      <div>
+                      <label id="director">Director :</label>
+                      <input type="text" id="fname" name="fname" placeholder="First Name" value ={{dvd.dfirstname}} />
+                      <input type="text" id="lname" name="lname" placeholder="Last Name" value ={{dvd.dlastname}} />
+                    </div>
+                  <div>
+                      <label id="cast">Casts :</label>
+                      <input type="text" id="cfname" name="cfname" placeholder="First Name" value ={{dvd.cfirstname}} />
+                      <input type="text" id="clname" name="clname" placeholder="Last Name" value ={{dvd.clastname}} />
+                    </div>
+                  <div>
+                    <label id="presyo">Price :</label>
+                    <input type="text" id="price" name="price" placeholder="Price" value ={{dvd.price}} />
+                    </div>
+                    <div>
+                      <label id="butang">Number of Items :</label>
+                      <input type="text" id="item" name="item" placeholder="No. of Items" value ={{dvd.items}} />
+                    </div>
+                    <div>
+                      <label id="skuu">SKU :</label>
+                      <input type="text" id="sku" name="sku" placeholder="SKU" value ={{dvd.sku}} />
+                    </div>
+                    <div>
+                      <label id="myfiles">DVD Pic :</label>
+                      <img src="{{ dvd.dvdpic.url }}" id="dvdpic"/>
+                      {% else %}
+                      <img src="{% static 'media/seulgo.png' %}"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                  <button type="button" id="modalsub">UPDATE</button>
+                    <button id="modalcan">CANCEL</button>
+                </form>
+                </div>
+              </div>
+              </div>    
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+        <div class="popup-overlay2" id="dvddelete"></div>
+        <div class="popup2">
+          <div class="popup-close" onclick="closeAUForm()">&times;</div>
+          <div class="form2">
+            <div class="header2">
+              DELETE DATA
+            </div>
+            <p>Are you sure you want to delete data?</p>
+            <button type="button" id="deletesub">DELETE</button>
+            <button id="deletecan">CANCEL</button>
+          </div>
+        </div>
+    </tbody>
+  </table>    
+
+    <footer>
+      <hr>
+      <p>2020 Copyright. All Rights Reserved.</p>
+    </footer>
+{% endblock content %}
+
+{% block footerinclude %}
+    <script src="{% static 'js/ScrollMagic.min.js' %}"></script>
+    <script src="{% static 'js/animation.gsap.min.js' %}"></script>
+    <script src="{% static 'js/TimelineLite.min.js' %}"></script>
+    <script src="{% static 'js/TweenMax.min.js' %}"></script>
+    <script src="{% static 'js/CSSPlugin.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src = "https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src ="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>             
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+            $(document).ready(function() {
+                $('#dvd').DataTable();
+            });
+    </script>    
+{% endblock footerinclude %}
+
+<!-- <div class="popup-overlay3" id = "dvdModal-{{dvd.sku}}" ></div>
+        <div class="popup3">
+          <div class="popup-close" onclick="closeCUForm()">&times;</div>
+          <div class="form3">
+            <div class="header3">
+              UPDATE FORM
+            </div>
+            <form class="modal">
+              <div>
+                <label id="date">Registration Date :</label>
+                <input type="date" name="datetime" id="datetimepicker" value ={{dvd.dateregistered}} />
+              </div>
+              <div>
+                <label id="gen">Genre :</label>
+                <input type="text" id="genre" name="genre" placeholder="Genre" value ={{dvd.genre}} />
+              </div>
+                <div>
+                <label id="release">Released Date :</label>
+                <input type="date" name="releasedate" id="reldate" value ={{dvd.title}} />
+              </div>
+            <div>
+                <label id="title">Movie Title :</label>
+                <input type="text" id="ttitle" name="title" placeholder="Movie Title" value ={{dvd.reldate}} />
+              </div>
+                <div>
+                <label id="director">Director :</label>
+                <input type="text" id="fname" name="fname" placeholder="First Name" value ={{dvd.dfirstname}} />
+                <input type="text" id="lname" name="lname" placeholder="Last Name" value ={{dvd.dlastname}} />
+              </div>
+            <div>
+                <label id="cast">Casts :</label>
+                <input type="text" id="cfname" name="cfname" placeholder="First Name" value ={{dvd.cfirstname}} />
+                <input type="text" id="clname" name="clname" placeholder="Last Name" value ={{dvd.clastname}} />
+              </div>
+            <div>
+              <label id="presyo">Price :</label>
+              <input type="text" id="price" name="price" placeholder="Price" value ={{dvd.price}} />
+              </div>
+              <div>
+                <label id="butang">Number of Items :</label>
+                <input type="text" id="item" name="item" placeholder="No. of Items" value ={{dvd.items}} />
+              </div>
+              <div>
+                <label id="skuu">SKU :</label>
+                <input type="text" id="sku" name="sku" placeholder="SKU" value ={{dvd.sku}} />
+              </div>
+            <button type="button" id="modalsub">UPDATE</button>
+              <button id="modalcan">CANCEL</button>
+          </form>
+          </div>
+        </div> -->
